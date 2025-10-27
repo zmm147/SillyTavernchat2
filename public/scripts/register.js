@@ -91,14 +91,22 @@ document.addEventListener('DOMContentLoaded', async function() {
             return false;
         }
 
-        // 验证用户名格式：只允许字母和数字，不允许任何符号
-        if (!/^[a-z0-9]+$/.test(formData.handle)) {
-            showError('用户名只能包含字母和数字，不允许使用符号（包括连字符、下划线等）');
+        // 规范化用户名：转小写，去除所有非字母数字字符
+        const normalizedHandle = formData.handle.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+
+        if (!normalizedHandle) {
+            showError('用户名无效');
+            return false;
+        }
+
+        // 验证用户名格式：只允许字母和数字
+        if (!/^[a-z0-9]+$/.test(normalizedHandle)) {
+            showError('用户名只能包含字母和数字，不允许使用符号');
             return false;
         }
 
         // 额外：限制过于随意/弱的用户名
-        if (isTrivialHandle(formData.handle)) {
+        if (isTrivialHandle(normalizedHandle)) {
             showError('用户名过于简单，请使用更有辨识度的用户名');
             return false;
         }
@@ -133,7 +141,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
-        if (!/^[a-z0-9]+$/.test(handle) || isTrivialHandle(handle)) {
+        // 规范化用户名：转小写，去除所有非字母数字字符
+        const normalizedHandle = handle.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        if (!normalizedHandle || !/^[a-z0-9]+$/.test(normalizedHandle) || isTrivialHandle(normalizedHandle)) {
             input.classList.remove('valid');
             input.classList.add('invalid');
         } else {
@@ -213,9 +224,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             body: JSON.stringify(formData)
         })
         .then(async (response) => {
+            // 先读取响应文本（只读取一次）
+            const text = await response.text();
+
             if (!response.ok) {
-                // 先读取文本，然后尝试解析为 JSON
-                const text = await response.text();
+                // 尝试解析为 JSON 获取错误信息
                 try {
                     const data = JSON.parse(text);
                     throw new Error(data.error || '注册失败');
@@ -224,7 +237,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                     throw new Error(text || '注册失败');
                 }
             }
-            return response.json();
+
+            // 成功时也解析文本为 JSON
+            try {
+                return JSON.parse(text);
+            } catch {
+                return {};
+            }
         })
         .then(data => {
             // 注册成功，跳转到登录页面

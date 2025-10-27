@@ -292,17 +292,17 @@ router.post('/register', async (request, response) => {
 
         if (!handle || !name || !password || !confirmPassword) {
             console.warn('Register failed: Missing required fields');
-            return response.status(400).json({ error: 'Missing required fields' });
+            return response.status(400).json({ error: '请填写所有必填字段' });
         }
 
         if (password !== confirmPassword) {
             console.warn('Register failed: Password mismatch');
-            return response.status(400).json({ error: 'Passwords do not match' });
+            return response.status(400).json({ error: '两次输入的密码不一致' });
         }
 
         if (password.length < 6) {
             console.warn('Register failed: Password too short');
-            return response.status(400).json({ error: 'Password must be at least 6 characters long' });
+            return response.status(400).json({ error: '密码长度至少6位' });
         }
 
         const ip = getIpAddress(request);
@@ -312,32 +312,33 @@ router.post('/register', async (request, response) => {
         const invitationValidation = await validateInvitationCode(invitationCode);
         if (!invitationValidation.valid) {
             console.warn('Register failed: Invalid invitation code');
-            return response.status(400).json({ error: invitationValidation.reason || 'Invalid invitation code' });
+            return response.status(400).json({ error: invitationValidation.reason || '邀请码无效' });
         }
 
         const handles = await getAllUserHandles();
-        const normalizedHandle = lodash.kebabCase(String(handle).toLowerCase().trim());
+        // 规范化用户名：转小写，去除所有非字母数字字符
+        const normalizedHandle = String(handle).toLowerCase().trim().replace(/[^a-z0-9]/g, '');
 
         if (!normalizedHandle) {
             console.warn('Register failed: Invalid handle');
-            return response.status(400).json({ error: 'Invalid handle' });
+            return response.status(400).json({ error: '用户名无效' });
         }
 
 		// 验证用户名只包含字母和数字，不允许任何符号
 		if (!/^[a-z0-9]+$/.test(normalizedHandle)) {
 			console.warn('Register failed: Handle contains invalid characters:', normalizedHandle);
-			return response.status(400).json({ error: 'Username can only contain letters and numbers, no symbols allowed.' });
+			return response.status(400).json({ error: '用户名只能包含字母和数字，不允许使用符号' });
 		}
 
 		// 限制随意/弱用户名
 		if (isTrivialHandle(normalizedHandle)) {
 			console.warn('Register failed: Trivial/weak handle not allowed:', normalizedHandle);
-			return response.status(400).json({ error: 'Handle is too simple. Please choose a more unique username.' });
+			return response.status(400).json({ error: '用户名过于简单，请使用更有辨识度的用户名' });
 		}
 
         if (handles.some(x => x === normalizedHandle)) {
             console.warn('Register failed: User with that handle already exists');
-            return response.status(409).json({ error: 'User already exists' });
+            return response.status(409).json({ error: '该用户名已存在' });
         }
 
         const salt = getPasswordSalt();
