@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             return false;
         }
 
-        // 验证用户名格式
-        if (!/^[a-z0-9-]+$/.test(formData.handle)) {
-            showError('用户名只能包含小写字母、数字和连字符');
+        // 验证用户名格式：只允许字母和数字，不允许任何符号
+        if (!/^[a-z0-9]+$/.test(formData.handle)) {
+            showError('用户名只能包含字母和数字，不允许使用符号（包括连字符、下划线等）');
             return false;
         }
 
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
-        if (!/^[a-z0-9-]+$/.test(handle) || isTrivialHandle(handle)) {
+        if (!/^[a-z0-9]+$/.test(handle) || isTrivialHandle(handle)) {
             input.classList.remove('valid');
             input.classList.add('invalid');
         } else {
