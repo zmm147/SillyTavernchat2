@@ -1,0 +1,19 @@
+{
+  "name": "plugin-template",
+  "version": "1.0.0",
+  "description": "Template for creating SillyTavernchat plugins",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "sillytavern",
+    "plugin"
+  ],
+  "author": "",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

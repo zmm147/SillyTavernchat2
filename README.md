@@ -207,6 +207,54 @@ SillyTavernchat/
 ### 扩展开发
 支持通过扩展系统添加自定义功能，详见：`/docs/extensions.md`
 
+### 🔌 插件开发
+SillyTavernchat 提供完整的插件系统，允许您通过服务器插件扩展功能。
+
+#### 快速开始
+- 📖 [插件开发快速开始](./plugins/QUICKSTART.md) - 5分钟上手指南
+- 📚 [完整插件开发文档](./PLUGIN_DEVELOPMENT.md) - 详细的API参考和最佳实践
+- 📂 [插件系统说明](./plugins/README.md) - 插件目录和示例说明
+
+#### 示例插件
+我们提供了以下示例插件供学习参考：
+
+1. **example-plugin** - 基础示例，展示核心功能
+2. **data-export-plugin** - 数据导出功能
+3. **api-monitor-plugin** - API请求监控
+4. **plugin-template** - 插件开发模板
+
+#### 启用插件
+在 `config.yaml` 中配置：
+
+```yaml
+enableServerPlugins: true                    # 启用插件系统
+enableServerPluginsAutoUpdate: false         # 禁用自动更新（开发推荐）
+```
+
+#### 创建您的第一个插件
+
+```bash
+# 复制模板
+cp -r plugins/plugin-template plugins/my-plugin
+cd plugins/my-plugin
+
+# 编辑 index.js 实现功能
+# 然后启动服务器
+npm start
+
+# 测试插件
+curl http://localhost:8000/api/plugins/my-plugin/health
+```
+
+#### 插件命令
+```bash
+# 更新所有插件
+node plugins.js update
+
+# 安装新插件
+node plugins.js install <git-url>
+```
+
 ## 🤝 贡献指南
 
 ### 提交代码
