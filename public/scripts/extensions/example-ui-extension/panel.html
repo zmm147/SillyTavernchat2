@@ -1,0 +1,88 @@
+<div class="example-ui-extension-panel">
+    <div class="panel-header">
+        <h2>{{title}}</h2>
+        <button class="close-btn" onclick="$(this).closest('.popup').remove()" title="Close">
+            <i class="fa-solid fa-times"></i>
+        </button>
+    </div>
+    
+    <div class="panel-content">
+        <!-- 信息部分 -->
+        <div class="info-section">
+            <h3>当前信息</h3>
+            <div class="info-item">
+                <label>角色：</label>
+                <span>{{characterName}}</span>
+            </div>
+            <div class="info-item">
+                <label>聊天 ID：</label>
+                <span>{{chatId}}</span>
+            </div>
+            <div class="info-item">
+                <label>时间：</label>
+                <span>{{timestamp}}</span>
+            </div>
+        </div>
+        
+        <!-- 设置部分 -->
+        <div class="settings-section">
+            <h3>拓展设置</h3>
+            
+            <!-- 主题选择 -->
+            <div class="setting-item">
+                <label for="example-ui-extension-theme">主题：</label>
+                <select id="example-ui-extension-theme">
+                    <option value="light">浅色</option>
+                    <option value="dark">深色</option>
+                    <option value="auto">自动</option>
+                </select>
+            </div>
+            
+            <!-- 通知复选框 -->
+            <div class="setting-item checkbox">
+                <label>
+                    <input type="checkbox" id="example-ui-extension-notifications" checked />
+                    启用通知
+                </label>
+            </div>
+            
+            <!-- 调试复选框 -->
+            <div class="setting-item checkbox">
+                <label>
+                    <input type="checkbox" id="example-ui-extension-debug" />
+                    调试模式
+                </label>
+            </div>
+        </div>
+        
+        <!-- 操作部分 -->
+        <div class="actions-section">
+            <h3>操作</h3>
+            <div class="button-group">
+                <button id="example-ui-extension-save-btn" class="btn btn-primary">
+                    <i class="fa-solid fa-save"></i> 保存设置
+                </button>
+                <button id="example-ui-extension-reset-btn" class="btn btn-secondary">
+                    <i class="fa-solid fa-undo"></i> 重置设置
+                </button>
+            </div>
+            
+            <div class="button-group">
+                <button id="example-ui-extension-export-btn" class="btn btn-secondary">
+                    <i class="fa-solid fa-download"></i> 导出数据
+                </button>
+                <button id="example-ui-extension-load-btn" class="btn btn-secondary">
+                    <i class="fa-solid fa-upload"></i> 加载数据
+                </button>
+            </div>
+        </div>
+        
+        <!-- 信息部分 -->
+        <div class="info-footer">
+            <p class="text-muted">
+                这是一个示例拓展，展示了基本的 UI 功能。
+                查看源代码以了解更多信息。
+            </p>
+        </div>
+    </div>
+</div>
